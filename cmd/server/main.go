@@ -532,6 +532,7 @@ func main() {
 		// masthead can render "Open Terminal" vs "Sign in" consistently
 		// with the landing page. The content itself is public.
 		r.Get("/developers", srv.HandleDevelopersPage)
+		r.Get("/developers/mcp", srv.HandleMCPDocsPage)
 		// Interactive OpenAPI console. Public — no auth required to
 		// *view* the spec; calls executed from inside it still pass
 		// through the normal per-endpoint auth rules.

@@ -93,6 +93,16 @@ func (s *Server) HandleSwaggerPage(w http.ResponseWriter, r *http.Request) {
 	s.renderTemplate(w, "swagger.html", nil)
 }
 
+// HandleMCPDocsPage serves the public connection guide for the authenticated,
+// remote MCP endpoint. It is separate from OpenAPI because MCP uses JSON-RPC
+// rather than the terminal's REST contract.
+func (s *Server) HandleMCPDocsPage(w http.ResponseWriter, r *http.Request) {
+	user := auth.FromContext(r.Context())
+	s.renderTemplate(w, "mcp.html", map[string]interface{}{
+		"IsAuthenticated": !user.IsGuest(),
+	})
+}
+
 // HandleServiceWorker serves the PWA service worker from the root path.
 // SWs scope to where they're served from, so this MUST live at /sw.js,
 // not /static/sw.js — otherwise the SW could only intercept /static/*

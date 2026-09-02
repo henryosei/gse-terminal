@@ -51,7 +51,8 @@ Set `MCP_ENABLED=true` to expose an authenticated, read-only MCP endpoint at
 Terminal API key. The initial tools provide bounded quote, OHLC history,
 market movers, briefing, and Pro/Admin technical-indicator access. Tool calls
 use typed schemas, strict limits, existing authorization, and audit logging;
-they never accept arbitrary QuestDB SQL.
+they never accept arbitrary QuestDB SQL. The hosted connection guide is at
+`/developers/mcp`.
 
 ## Running locally
 

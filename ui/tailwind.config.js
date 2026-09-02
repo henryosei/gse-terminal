@@ -6,6 +6,7 @@ export default {
     "./admin.html",
     "./login.html",
     "./developers.html",
+    "./mcp.html",
     "./src/**/*.{js,ts,jsx,tsx,html,css}",
     "../internal/server/templates/*.html",
   ],

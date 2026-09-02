@@ -53,6 +53,7 @@ export default defineConfig(({ mode }) => ({
         admin:      resolve(__dirname, 'admin.html'),
         developers: resolve(__dirname, 'developers.html'), // public API reference
         swagger:    resolve(__dirname, 'swagger.html'),    // interactive OpenAPI console
+        mcp:        resolve(__dirname, 'mcp.html'),        // public MCP connection guide
         settings:   resolve(__dirname, 'settings.html'),   // user self-service (account/alerts/api-keys)
       },
     },

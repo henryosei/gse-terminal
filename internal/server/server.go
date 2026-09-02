@@ -385,7 +385,7 @@ func (s *Server) renderTemplate(w http.ResponseWriter, name string, data interfa
 		// Workflow: `npm run build` → page refresh (no Go restart needed).
 		tmpl, err := template.New("").Funcs(templateFuncs()).ParseFiles(
 			"ui/dist/terminal.html", "ui/dist/ui-pro.html", "ui/dist/login.html", "ui/dist/admin.html",
-			"ui/dist/index.html", "ui/dist/developers.html", "ui/dist/swagger.html",
+			"ui/dist/index.html", "ui/dist/developers.html", "ui/dist/swagger.html", "ui/dist/mcp.html",
 			"ui/dist/settings.html",
 		)
 		switch {

@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GSE Terminal — MCP Field Guide</title>
+  <meta name="description" content="Connect an MCP client to GSE Terminal for authenticated Ghana Stock Exchange market data tools.">
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,700;9..144,900&family=IBM+Plex+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script type="module" src="/static/mcp.js"></script>
+  <style>
+    :root { --ink:#0b0a08; --ink2:#161310; --paper:#f4ecd8; --cream:#e9dfc4; --amber:#ffb12b; --red:#ce1126; --green:#006b3f; --hair:rgba(244,236,216,.15); --muted:rgba(244,236,216,.62); }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; background:var(--ink); }
+    body { margin:0; background:var(--ink); color:var(--paper); font-family:Inter,system-ui,sans-serif; line-height:1.6; }
+    body::before { content:""; inset:0; pointer-events:none; position:fixed; z-index:10; opacity:.22; background-image:repeating-linear-gradient(0deg,transparent 0 3px,rgba(255,255,255,.025) 3px 4px); }
+    a { color:var(--amber); text-decoration:none; } a:hover { color:var(--paper); }
+    code,pre,.mono { font-family:"IBM Plex Mono",ui-monospace,monospace; }
+    code { color:var(--amber); font-size:.9em; }
+    .tape { height:32px; display:flex; overflow:hidden; align-items:center; background:var(--amber); color:var(--ink); font:700 10px/1 "IBM Plex Mono",monospace; letter-spacing:.13em; text-transform:uppercase; }
+    .tape span { white-space:nowrap; padding-left:24px; }
+    .mast { position:sticky; top:0; z-index:8; background:rgba(11,10,8,.96); backdrop-filter:blur(14px); border-bottom:1px solid var(--hair); }
+    .mast-inner { height:74px; max-width:1280px; padding:0 28px; margin:auto; display:flex; align-items:center; justify-content:space-between; gap:20px; }
+    .brand { color:var(--paper); display:flex; align-items:center; gap:11px; font:700 19px Fraunces,serif; letter-spacing:-.04em; }
+    .mark { width:30px; height:30px; border:1px solid var(--amber); display:grid; place-items:center; position:relative; }.mark i{width:16px;height:16px;background:var(--amber);display:block}.mark::after{content:"";position:absolute;width:5px;height:5px;right:-2px;top:-2px;background:var(--red)}
+    .nav { display:flex; align-items:center; gap:20px; font:600 11px "IBM Plex Mono",monospace; text-transform:uppercase; letter-spacing:.06em; }.nav a{color:var(--muted)}.nav a.active,.nav a:hover{color:var(--amber)}
+    .cta { border:1px solid var(--amber); padding:8px 12px; color:var(--amber); font:700 10px "IBM Plex Mono",monospace; text-transform:uppercase; letter-spacing:.06em; }.cta:hover{background:var(--amber);color:var(--ink)}
+    .wrap { max-width:1280px; margin:auto; padding:54px 28px 100px; }
+    .eyebrow { color:var(--amber); font:700 11px "IBM Plex Mono",monospace; letter-spacing:.12em; text-transform:uppercase; display:flex; align-items:center; gap:10px; }.pulse{width:7px;height:7px;background:var(--green);box-shadow:0 0 0 4px rgba(0,107,63,.18);border-radius:50%}
+    h1,h2,h3 { font-family:Fraunces,serif; letter-spacing:-.045em; margin:0; line-height:1; } h1{font-size:clamp(52px,8vw,104px);max-width:890px;margin:16px 0 24px}h1 em,h2 em{font-style:italic;color:var(--amber)}h2{font-size:clamp(32px,4vw,50px)}h3{font-size:26px}
+    .lede { max-width:680px; font-size:19px; color:var(--cream); margin:0 0 36px; }
+    .endpoint { border:1px solid var(--hair); background:linear-gradient(135deg,rgba(255,177,43,.12),rgba(255,177,43,.025)); display:grid; grid-template-columns:auto 1fr auto; gap:18px; align-items:center; padding:18px 20px; }.method{background:var(--amber);color:var(--ink);padding:4px 7px;font:700 11px "IBM Plex Mono",monospace}.endpoint strong{font:600 16px "IBM Plex Mono",monospace}.endpoint small{color:var(--muted);font:11px "IBM Plex Mono",monospace}
+    .layout { margin-top:82px; display:grid; grid-template-columns:220px minmax(0,1fr); gap:56px; }.toc{border-top:1px solid var(--hair);position:sticky;top:130px;align-self:start;padding-top:15px}.toc b{display:block;color:var(--muted);font:700 10px "IBM Plex Mono",monospace;text-transform:uppercase;letter-spacing:.1em;margin-bottom:9px}.toc a{display:block;color:var(--muted);font:12px "IBM Plex Mono",monospace;padding:5px 0}.toc a:hover{color:var(--amber)}
+    section { scroll-margin-top:125px; margin-bottom:92px; }.section-kicker{font:700 10px "IBM Plex Mono",monospace;color:var(--amber);letter-spacing:.12em;text-transform:uppercase;margin-bottom:13px}.copy{max-width:760px;color:var(--muted);font-size:16px}.grid { display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:var(--hair);border:1px solid var(--hair);margin-top:26px}.card{background:var(--ink2);padding:24px}.card p{margin:9px 0 0;color:var(--muted);font-size:14px}.num{color:var(--amber);font:700 11px "IBM Plex Mono",monospace}
+    .code { position:relative;background:#070604;border:1px solid var(--hair);margin:24px 0;overflow:auto}.code-label{display:flex;justify-content:space-between;padding:8px 12px;border-bottom:1px solid var(--hair);color:var(--muted);font:700 10px "IBM Plex Mono",monospace;text-transform:uppercase;letter-spacing:.1em}.code pre{margin:0;padding:18px 20px;color:var(--cream);font-size:12px;line-height:1.7;white-space:pre}.copy-code{background:none;border:0;color:var(--amber);cursor:pointer;font:inherit}.copy-code:hover{color:var(--paper)}
+    .tools { margin-top:25px;border-top:1px solid var(--hair); }.tool{padding:19px 0;border-bottom:1px solid var(--hair);display:grid;grid-template-columns:minmax(220px,.8fr) 1.4fr auto;gap:20px;align-items:start}.tool-name{font:700 13px "IBM Plex Mono",monospace;color:var(--amber)}.tool p{margin:0;color:var(--muted);font-size:13px}.badge{font:700 9px "IBM Plex Mono",monospace;letter-spacing:.08em;padding:4px 6px;border:1px solid var(--hair);color:var(--cream);white-space:nowrap}.badge.pro{border-color:rgba(255,177,43,.5);color:var(--amber)}
+    .note{border-left:3px solid var(--amber);padding:15px 18px;background:rgba(255,177,43,.07);color:var(--cream);font-size:14px;margin-top:26px}.note strong{color:var(--amber)}
+    .foot{border-top:1px solid var(--hair);padding-top:30px;color:var(--muted);font:11px "IBM Plex Mono",monospace;display:flex;justify-content:space-between;gap:20px}.foot a{color:var(--amber)}
+    @media(max-width:800px){.mast-inner{padding:0 18px}.nav{display:none}.wrap{padding:38px 18px 70px}.layout{display:block;margin-top:54px}.toc{display:none}.grid{grid-template-columns:1fr}.tool{grid-template-columns:1fr;gap:8px}.endpoint{grid-template-columns:auto 1fr}.endpoint small{grid-column:2}.cta{font-size:0}.cta::after{content:'→';font-size:15px}.lede{font-size:17px}}
+  </style>
+</head>
+<body>
+  <div class="tape"><span>GSE TERMINAL · MCP FIELD GUIDE · REMOTE TOOLS FOR THE GHANA STOCK EXCHANGE · HTTPS ONLY · READ-ONLY BY DESIGN · </span></div>
+  <header class="mast"><div class="mast-inner">
+    <a class="brand" href="/"><span class="mark"><i></i></span>GSE·Terminal</a>
+    <nav class="nav" aria-label="Developer navigation"><a href="/developers">Dispatch</a><a href="/developers/swagger">Swagger</a><a href="/developers/mcp" class="active">MCP</a></nav>
+    {{if .IsAuthenticated}}<a class="cta" href="/terminal">Open terminal →</a>{{else}}<a class="cta" href="/login">Issue a key →</a>{{end}}
+  </div></header>
+  <main class="wrap">
+    <div class="eyebrow"><span class="pulse"></span>Protocol guide · MCP 2025-06-18</div>
+    <h1>Put the market<br><em>in your agent.</em></h1>
+    <p class="lede">GSE Terminal is a remote, read-only Model Context Protocol server. Connect a compatible client to bring authenticated Ghana Stock Exchange data into a conversation, workflow, or research agent.</p>
+    <div class="endpoint"><span class="method">POST</span><strong>https://gse.teckdroids.com/mcp</strong><small>Streamable HTTP · API key authentication</small></div>
+
+    <div class="layout"><aside class="toc"><b>Field guide</b><a href="#connect">01 / Connect</a><a href="#clients">02 / Client setup</a><a href="#tools">03 / Tools</a><a href="#smoke">04 / Smoke test</a><a href="#security">05 / Security</a></aside>
+    <div>
+      <section id="connect"><div class="section-kicker">01 / Connect</div><h2>One endpoint.<br><em>Your existing key.</em></h2><p class="copy">No local server or package is required. Create a dedicated API key from <a href="/settings">Settings → API Keys</a>, then supply it as a bearer token. The MCP endpoint must be enabled by the operator with <code>MCP_ENABLED=true</code>.</p>
+      <div class="code"><div class="code-label"><span>Connection definition</span><button class="copy-code" type="button">Copy</button></div><pre>{
+  "mcpServers": {
+    "gse-terminal": {
+      "type": "http",
+      "url": "https://gse.teckdroids.com/mcp",
+      "headers": {
+        "Authorization": "Bearer ges_live_your_api_key"
+      }
+    }
+  }
+}</pre></div></section>
+
+      <section id="clients"><div class="section-kicker">02 / Client setup</div><h2>Bring your own<br><em>thinking surface.</em></h2><p class="copy">Install or open an MCP-compatible client, add the remote server configuration, then reload the client. The exact configuration screen differs by product; the endpoint and authorization header do not.</p><div class="grid"><article class="card"><span class="num">A / CURSOR</span><h3>Cursor</h3><p>Open MCP settings, add a remote HTTP server, then paste the connection definition above.</p></article><article class="card"><span class="num">B / VS CODE</span><h3>VS Code</h3><p>Use an MCP-compatible extension or agent integration, then register the remote HTTP endpoint and bearer header.</p></article><article class="card"><span class="num">C / CLAUDE</span><h3>Claude</h3><p>Where remote MCP connections are available, add the endpoint as a custom connector and use a dedicated API key.</p></article><article class="card"><span class="num">D / CUSTOM</span><h3>Your client</h3><p>Send JSON-RPC 2.0 over HTTPS. Initialize with protocol version <code>2025-06-18</code>, then call <code>tools/list</code>.</p></article></div></section>
+
+      <section id="tools"><div class="section-kicker">03 / Tools</div><h2>A bounded market<br><em>data surface.</em></h2><p class="copy">Tools have typed inputs, validated tickers and limits, rate limits, and audit records. They never accept arbitrary SQL.</p><div class="tools"><div class="tool"><span class="tool-name">get_latest_quote</span><p>Latest quote, bid, offer, spread, and volume for a symbol.</p><span class="badge">AUTHENTICATED</span></div><div class="tool"><span class="tool-name">get_price_history</span><p>Bounded daily, weekly, or monthly OHLCV history.</p><span class="badge">AUTHENTICATED</span></div><div class="tool"><span class="tool-name">get_market_movers</span><p>Top gainers, losers, or active listings with thin trades excluded.</p><span class="badge">AUTHENTICATED</span></div><div class="tool"><span class="tool-name">get_market_briefing</span><p>Most recently saved daily briefing and symbol insights.</p><span class="badge">AUTHENTICATED</span></div><div class="tool"><span class="tool-name">get_technical_indicators</span><p>RSI, moving averages, and average daily volume.</p><span class="badge pro">PRO / ADMIN</span></div></div></section>
+
+      <section id="smoke"><div class="section-kicker">04 / Smoke test</div><h2>Verify the wire<br><em>before you build.</em></h2><p class="copy">Use a new, dedicated API key. Do not place a live key in source control, shared shell history, issue trackers, or chat.</p><div class="code"><div class="code-label"><span>Initialize</span><button class="copy-code" type="button">Copy</button></div><pre>curl -X POST https://gse.teckdroids.com/mcp \
+  -H 'Content-Type: application/json' \
+  -H 'Authorization: Bearer ges_live_your_api_key' \
+  --data '{
+    "jsonrpc": "2.0",
+    "id": 1,
+    "method": "initialize",
+    "params": {
+      "protocolVersion": "2025-06-18",
+      "clientInfo": {"name": "smoke-test", "version": "1.0"}
+    }
+  }'</pre></div><div class="note"><strong>Expected:</strong> a JSON-RPC <code>2.0</code> response with <code>protocolVersion</code> set to <code>2025-06-18</code> and a <code>tools</code> capability. A <code>401</code> means the route is live but the credential is absent or invalid.</div></section>
+
+      <section id="security"><div class="section-kicker">05 / Security</div><h2>Keys are credentials.<br><em>Treat them that way.</em></h2><div class="grid"><article class="card"><span class="num">ONE KEY / CLIENT</span><p>Create a separate revocable key for each person, device, or automation.</p></article><article class="card"><span class="num">HTTPS ONLY</span><p>Never send a bearer key over an unencrypted connection.</p></article><article class="card"><span class="num">LEAST ACCESS</span><p>Use a standard account unless Pro-only technical indicators are required.</p></article><article class="card"><span class="num">ROTATE FAST</span><p>Revoke immediately if a key appears in logs, screenshots, shell history, or chat.</p></article></div></section>
+    </div></div>
+    <footer class="foot"><span>GSE Terminal · MCP Field Guide · 2025-06-18</span><span><a href="/developers">REST dispatch</a> · <a href="/developers/swagger">Swagger console</a></span></footer>
+  </main>
+</body>
+</html>
