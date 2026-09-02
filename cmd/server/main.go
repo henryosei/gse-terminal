@@ -362,6 +362,13 @@ func main() {
 		10, 1*time.Minute,
 		httprate.WithKeyFuncs(keyByUserOrIP),
 	)
+	// MCP tools are read-only but can still trigger bounded database work.
+	// Keep their budget separate from browser and LLM traffic so an automated
+	// client cannot consume either pool.
+	mcpLimiter := httprate.Limit(
+		30, 1*time.Minute,
+		httprate.WithKeyFuncs(keyByUserOrIP),
+	)
 
 	// Endpoints that verify a password. These sit behind RequireAuth, so
 	// they were only covered by the global 300/min budget — which made
@@ -504,6 +511,16 @@ func main() {
 	r.Get("/icon-maskable.png", srv.HandlePWAIconMaskable)
 	r.Get("/screenshot-wide.png", srv.HandlePWAScreenshotWide)
 	r.Get("/screenshot-mobile.png", srv.HandlePWAScreenshotMobile)
+
+	// MCP is opt-in and authenticated. Its handler returns an HTTP 401 rather
+	// than redirecting machine clients when no valid session/API key is present.
+	if cfg.MCPEnabled {
+		r.Group(func(r chi.Router) {
+			r.Use(authSvc.Middleware)
+			r.With(mcpLimiter).Post("/mcp", srv.HandleMCP)
+		})
+		slog.Info("MCP endpoint enabled", "path", "/mcp")
+	}
 
 	// API - Session dependent (Guest friendly)
 	r.Group(func(r chi.Router) {

@@ -32,7 +32,7 @@ func TestLoadDeploymentFlags(t *testing.T) {
 		"POSTGRES_USER": "u", "POSTGRES_PASSWORD": "p", "POSTGRES_DB": "d",
 		"JWT_SECRET": "s", "QUESTDB_URL": "q", "QUESTDB_ILP_TCP_URL": "i",
 		"ALLOWED_ORIGINS": "https://example.com",
-		"TRUST_PROXY":     "true", "METRICS_TOKEN": "tok",
+		"TRUST_PROXY":     "true", "METRICS_TOKEN": "tok", "MCP_ENABLED": "true",
 	} {
 		t.Setenv(k, v)
 	}
@@ -45,6 +45,26 @@ func TestLoadDeploymentFlags(t *testing.T) {
 	}
 	if cfg.MetricsToken != "tok" {
 		t.Errorf("MetricsToken = %q", cfg.MetricsToken)
+	}
+	if !cfg.MCPEnabled {
+		t.Error("MCP_ENABLED=true not applied")
+	}
+}
+
+func TestLoadMCPDisabledByDefault(t *testing.T) {
+	for k, v := range map[string]string{
+		"POSTGRES_USER": "u", "POSTGRES_PASSWORD": "p", "POSTGRES_DB": "d",
+		"JWT_SECRET": "s", "QUESTDB_URL": "q", "QUESTDB_ILP_TCP_URL": "i",
+		"ALLOWED_ORIGINS": "https://example.com", "MCP_ENABLED": "",
+	} {
+		t.Setenv(k, v)
+	}
+	cfg, err := Load()
+	if err != nil {
+		t.Fatalf("Load: %v", err)
+	}
+	if cfg.MCPEnabled {
+		t.Error("MCP should be disabled when MCP_ENABLED is unset")
 	}
 }
 

@@ -48,6 +48,8 @@ const (
 	ActionProRequestNew = "pro_request.create"
 	ActionProRequestOK  = "pro_request.approve"
 	ActionProRequestNo  = "pro_request.deny"
+	// ActionMCPToolCall records a sanitized, read-only MCP tool invocation.
+	ActionMCPToolCall = "mcp.tool.call"
 )
 
 // Log records one audit entry. metadata may be nil.

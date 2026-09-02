@@ -44,6 +44,15 @@ OpenAI-compatible endpoint** (Ollama, vLLM, OpenRouter, Groq, LiteLLM) via
 `OPENAI_COMPAT_BASE_URL`. Providers are tried in order, so one being rate
 limited doesn't take the feature down.
 
+### MCP integration
+
+Set `MCP_ENABLED=true` to expose an authenticated, read-only MCP endpoint at
+`POST /mcp`. Clients authenticate with an existing session cookie or a GSE
+Terminal API key. The initial tools provide bounded quote, OHLC history,
+market movers, briefing, and Pro/Admin technical-indicator access. Tool calls
+use typed schemas, strict limits, existing authorization, and audit logging;
+they never accept arbitrary QuestDB SQL.
+
 ## Running locally
 
 Requires Go 1.25, Node 20, and Docker.

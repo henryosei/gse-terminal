@@ -106,6 +106,10 @@ type Config struct {
 	// Development leaves it open.
 	MetricsToken string
 
+	// MCPEnabled exposes the authenticated, read-only Model Context Protocol
+	// endpoint. It is disabled by default so deployments must opt in.
+	MCPEnabled bool
+
 	// WebSocket
 	AllowedOrigins []string // comma-separated, used for CheckOrigin
 }
@@ -209,6 +213,7 @@ func Load() (*Config, error) {
 		WebPushAllowedHosts: parseList(getEnv("WEBPUSH_ALLOWED_HOSTS", "")),
 		TrustProxy:          getEnvBool("TRUST_PROXY", false),
 		MetricsToken:        os.Getenv("METRICS_TOKEN"),
+		MCPEnabled:          getEnvBool("MCP_ENABLED", false),
 		AllowedOrigins:      parseList(getEnv("ALLOWED_ORIGINS", "")),
 	}
 
